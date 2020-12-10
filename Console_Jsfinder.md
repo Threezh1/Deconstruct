@@ -55,7 +55,7 @@ $$('*').forEach(element => {
     if (element.tagName == "SCRIPT") { js_content += element.text }
 }); urls = new Set(urls);
 urls.forEach(rawurl => {
-    if (rawurl != undefined && rawurl != "" && rawurl.startsWith("http") == true){
+    if (rawurl != undefined && rawurl != "" && typeof(rawurl) == "string" && rawurl.startsWith("http") == true){
         url = new URL(rawurl);
         if (url.host.endsWith(location.host) == true && url.pathname.endsWith(".js") == true) {
             result_raw = result_raw.concat(extract_url(geturlContent(url.pathname)));
@@ -107,10 +107,10 @@ function extract_url(js_content){
             match = match.replaceAll(/('|")/g, "");
             if (match.startsWith("http") == true){
                 suburl = new URL(match);
-                if (suburl.host.endsWith(getMainHost()) == true){ result.push(match);}
+                if (suburl.host.endsWith(getMainHost()) == true){ result.push(match); }
             }else{
                 url = new URL(match, location.origin);
-                result.push(url.href);
+                if (url.host.endsWith(getMainHost()) == true){ result.push(url.href); }
             }}});}
     return Array.from(new Set(result));
 }
